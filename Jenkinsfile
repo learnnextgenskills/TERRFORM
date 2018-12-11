@@ -10,7 +10,7 @@ node {
     // Get the Terraform tool.
     def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     env.PATH = "${tfHome}:${env.PATH}"
-    wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+    //wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
  
             // Mark the code build 'plan'....
             stage name: 'Plan', concurrency: 1
@@ -64,5 +64,5 @@ node {
                     currentBuild.result = 'FAILURE'
                 }
             }
-    }
+   // }
 }
