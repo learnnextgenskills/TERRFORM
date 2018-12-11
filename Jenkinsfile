@@ -1,5 +1,5 @@
 
-de {
+node {
  
     // Mark the code checkout 'Checkout'....
     stage 'Checkout'
