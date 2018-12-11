@@ -25,7 +25,7 @@ node {
             //sh "./init"
             sh "terraform init"
             sh "terraform get"
-            sh 'terraform apply plan.out; echo \$? > status.apply'
+            
             def exitCode = readFile('status').trim()
             def apply = false
 			echo $exitcode
@@ -37,7 +37,8 @@ node {
                 
  
             if (apply) {
-                stage name: 'Apply', concurrency: 1
+                //stage name: 'Apply', concurrency: 1
+				sh 'terraform apply plan.out; echo \$? > status.apply'
                 unstash 'plan'
                 if (fileExists("status.apply")) {
                     sh "rm status.apply"
