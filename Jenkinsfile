@@ -30,25 +30,11 @@ node {
             def apply = false
 			echo $exitcode
             echo "Terraform Plan Exit Code: ${exitCode}"
-            if (exitCode == "0") {
-                currentBuild.result = 'SUCCESS'
-            }
-            if (exitCode == "1") {
-                //slackSend channel: '#ci', color: '#0080ff', message: "Plan Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
-                currentBuild.result = 'FAILURE'
-            }
-            if (exitCode == "2") {
-                stash name: "plan", includes: "plan.out"
-                //slackSend channel: '#ci', color: 'good', message: "Plan Awaiting Approval: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
-                try {
+            
+            
                     input message: 'Apply Plan?', ok: 'Apply'
                     apply = true
-                } catch (err) {
-                    slackSend channel: '#ci', color: 'warning', message: "Plan Discarded: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
-                    apply = false
-                    currentBuild.result = 'UNSTABLE'
-                }
-            }
+                
  
             if (apply) {
                 stage name: 'Apply', concurrency: 1
