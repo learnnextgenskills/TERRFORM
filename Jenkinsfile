@@ -1,24 +1,3 @@
-Skip to content
- 
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- @learnnextgenskills Sign out
- The password you provided is weak and can be easily guessed. To increase your security, please change your password as soon as possible.
-
-Read our documentation on safer password practices.
-
-0
-0 0 learnnextgenskills/TERRFORM
- Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
-TERRFORM/Jenkinsfile
-a36ab5d  39 minutes ago
-@learnnextgenskills learnnextgenskills Update Jenkinsfile
-     
-70 lines (64 sloc)  2.87 KB
 node {
  
     // Mark the code checkout 'Checkout'....
