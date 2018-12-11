@@ -1,3 +1,24 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @learnnextgenskills Sign out
+ The password you provided is weak and can be easily guessed. To increase your security, please change your password as soon as possible.
+
+Read our documentation on safer password practices.
+
+0
+0 0 learnnextgenskills/TERRFORM
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
+TERRFORM/Jenkinsfile
+a36ab5d  39 minutes ago
+@learnnextgenskills learnnextgenskills Update Jenkinsfile
+     
+70 lines (64 sloc)  2.87 KB
 node {
  
     // Mark the code checkout 'Checkout'....
@@ -34,12 +55,12 @@ node {
                 currentBuild.result = 'SUCCESS'
             }
             if (exitCode == "1") {
-                slackSend channel: '#ci', color: '#0080ff', message: "Plan Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
+                //slackSend channel: '#ci', color: '#0080ff', message: "Plan Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
                 currentBuild.result = 'FAILURE'
             }
             if (exitCode == "2") {
                 stash name: "plan", includes: "plan.out"
-                slackSend channel: '#ci', color: 'good', message: "Plan Awaiting Approval: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
+                //slackSend channel: '#ci', color: 'good', message: "Plan Awaiting Approval: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
                 try {
                     input message: 'Apply Plan?', ok: 'Apply'
                     apply = true
@@ -56,7 +77,7 @@ node {
                 if (fileExists("status.apply")) {
                     sh "rm status.apply"
                 }
-                sh 'terraform apply plan.out; echo \$? > status.apply'
+                sh 'terraform apply plan.out; echo > status.apply'
                 def applyExitCode = readFile('status.apply').trim()
                 if (applyExitCode == "0") {
                     slackSend channel: '#ci', color: 'good', message: "Changes Applied ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"    
