@@ -1,4 +1,3 @@
-
 node {
  
     // Mark the code checkout 'Checkout'....
@@ -29,6 +28,7 @@ node {
             sh 'terraform apply plan.out; echo \$? > status.apply'
             def exitCode = readFile('status').trim()
             def apply = false
+			echo $exitcode
             echo "Terraform Plan Exit Code: ${exitCode}"
             if (exitCode == "0") {
                 currentBuild.result = 'SUCCESS'
@@ -56,7 +56,7 @@ node {
                 if (fileExists("status.apply")) {
                     sh "rm status.apply"
                 }
-                sh 'set +e; terraform apply plan.out; echo \$? &amp;gt; status.apply'
+                sh 'terraform apply plan.out; echo \$? > status.apply'
                 def applyExitCode = readFile('status.apply').trim()
                 if (applyExitCode == "0") {
                     slackSend channel: '#ci', color: 'good', message: "Changes Applied ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"    
