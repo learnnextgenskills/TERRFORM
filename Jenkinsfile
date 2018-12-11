@@ -27,7 +27,7 @@ node {
                 stage name: 'Apply', concurrency: 1
                 
                
-                sh 'terraform apply'
+                sh 'terraform apply -auto-approve'
                 
             }
    // }
