@@ -1,3 +1,4 @@
+
 node {
  
     // Mark the code checkout 'Checkout'....
@@ -25,25 +26,38 @@ node {
             //sh "./init"
             sh "terraform init"
             sh "terraform get"
-            
+            //sh 'terraform apply plan.out; echo \$? > status.apply'
             def exitCode = readFile('status').trim()
             def apply = false
 			echo $exitcode
             echo "Terraform Plan Exit Code: ${exitCode}"
-            
-            
+            if (exitCode == "0") {
+                currentBuild.result = 'SUCCESS'
+            }
+            if (exitCode == "1") {
+                slackSend channel: '#ci', color: '#0080ff', message: "Plan Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
+                currentBuild.result = 'FAILURE'
+            }
+            if (exitCode == "2") {
+                stash name: "plan", includes: "plan.out"
+                slackSend channel: '#ci', color: 'good', message: "Plan Awaiting Approval: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
+                try {
                     input message: 'Apply Plan?', ok: 'Apply'
                     apply = true
-                
+                } catch (err) {
+                    slackSend channel: '#ci', color: 'warning', message: "Plan Discarded: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
+                    apply = false
+                    currentBuild.result = 'UNSTABLE'
+                }
+            }
  
             if (apply) {
-                    stage name: 'Apply', concurrency: 1
-				sh 'terraform apply plan.out; echo \$? > status.apply'
+                stage name: 'Apply', concurrency: 1
                 unstash 'plan'
                 if (fileExists("status.apply")) {
                     sh "rm status.apply"
                 }
-                sh 'terraform apply plan.out; echo > status.apply'
+                sh 'terraform apply plan.out; echo \$? > status.apply'
                 def applyExitCode = readFile('status.apply').trim()
                 if (applyExitCode == "0") {
                     slackSend channel: '#ci', color: 'good', message: "Changes Applied ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"    
