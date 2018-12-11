@@ -26,7 +26,7 @@ node {
             if (apply) {
                 stage name: 'Apply', concurrency: 1
                 
-               
+                sh 'terraform destroy'
                 sh 'terraform apply -auto-approve'
                 
             }
