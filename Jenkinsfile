@@ -37,7 +37,7 @@ node {
                 
  
             if (apply) {
-                //stage name: 'Apply', concurrency: 1
+                    stage name: 'Apply', concurrency: 1
 				sh 'terraform apply plan.out; echo \$? > status.apply'
                 unstash 'plan'
                 if (fileExists("status.apply")) {
