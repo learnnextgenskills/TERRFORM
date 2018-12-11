@@ -5,12 +5,12 @@ node {
     stage 'Checkout'
  
     // // Get some code from a GitHub repository
-    git url: 'git@github.com:myorg/infrastructure.git'
+    //git url: 'git@github.com:myorg/infrastructure.git'
  
     // Get the Terraform tool.
     def tfHome = tool name: 'Terraform', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     env.PATH = "${tfHome}:${env.PATH}"
-    wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
+    //wrap([$class: 'AnsiColorBuildWrapper', colorMapName: 'xterm']) {
  
             // Mark the code build 'plan'....
             stage name: 'Plan', concurrency: 1
@@ -23,7 +23,8 @@ node {
             if (fileExists("status")) {
                 sh "rm status"
             }
-            sh "./init"
+            //sh "./init"
+            sh "terraform init"
             sh "terraform get"
             sh "set +e; terraform plan -out=plan.out -detailed-exitcode; echo \$? &gt; status"
             def exitCode = readFile('status').trim()
@@ -64,5 +65,5 @@ node {
                     currentBuild.result = 'FAILURE'
                 }
             }
-    }
+   // }
 }
