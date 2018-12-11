@@ -25,16 +25,10 @@ node {
  
             if (apply) {
                 stage name: 'Apply', concurrency: 1
-                unstash 'plan'
+                
                
                 sh 'terraform apply'
-                def applyExitCode = readFile('status.apply').trim()
-                if (applyExitCode == "0") {
-                    slackSend channel: '#ci', color: 'good', message: "Changes Applied ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"    
-                } else {
-                    slackSend channel: '#ci', color: 'danger', message: "Apply Failed: ${env.JOB_NAME} - ${env.BUILD_NUMBER} ()"
-                    currentBuild.result = 'FAILURE'
-                }
+                
             }
    // }
 }
