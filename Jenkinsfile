@@ -20,9 +20,9 @@ node {
             if (fileExists(".terraform/terraform.tfstate")) {
                 sh "rm -rf .terraform/terraform.tfstate"
             }
-            if (fileExists("status")) {
-                sh "rm status"
-            }
+            //if (fileExists("status")) {
+            //    sh "rm status"
+            }//
             //sh "./init"
             sh "terraform init"
             sh "terraform get"
